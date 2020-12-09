@@ -16,5 +16,22 @@ exports.seed = function(knex) {
         }
       });
       return knex('posts').insert(posts);
-    });
+    })
+    .then(n => {
+      return knex('posts').select('id')
+    })
+    .then(records => {
+      return Promise.all(records.map(record => {
+        return knex('comments').insert({
+          post_id:  parseInt(record.id),
+          content: faker.lorem.paragraph()
+        })
+      }))
+    })
+    .then(n => {
+      console.log(n);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 };

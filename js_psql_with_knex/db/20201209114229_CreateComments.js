@@ -4,6 +4,7 @@ exports.up = function(knex) {
     table.bigIncrements('id');
     table.text('content');
     table.integer('post_id').references('posts.id');
+    // comments table will now have a post_id column that references the posts table id column
   });
 };
 
