@@ -42,6 +42,29 @@ app.use((req, res, next) => {
   // next is a function, when invoked it will tell express to move on to the next middleware
   next();
 })
+
+app.use(noMonkey);
+
+function noMonkey(req, res, next) {
+  console.log(req.body);
+  // req.body can look something like:
+  // { username: 'monkey', a: 'apples', b: 'bananas' }
+  const body = req.body;
+
+  let monkeyFound = false;
+  for (let key in body) {
+    if(`${body[key]}`.toLowerCase() === 'monkey') {
+      monkeyFound = true;
+    }
+  }
+  if (monkeyFound) {
+    res.send('No monkeys allowed');
+  } else {
+    next();
+  }
+
+}
+
 // app.get arguments:
 // 1) path
 // 2) callback with the arguments: 1) request 2) response
@@ -115,7 +138,12 @@ app.post('/sign_in', (req, res) => {
   const username = req.body.username;
   res.cookie('username', username, { maxAge: COOKIE_EXPIRE });
   res.redirect('/welcome');
-})
+});
+
+app.post('/sign_out', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/welcome');
+});
 
 const ADDRESS = 'localhost'; // the loopback address this is your home for your machine. The IP is 127.0.0.1
 const PORT = 3000;
