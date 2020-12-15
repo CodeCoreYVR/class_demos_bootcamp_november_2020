@@ -1,5 +1,17 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+
+// STATIC ASSETS
+// Use `path.join` to combine string arguments into a path
+// path.join('/', 'users', 'bob'); // "/users/bob"
+
+// __dirname is a global variable provided by node that has the value of the path to your root directory
+
+app.use(express.static(path.join(__dirname, 'public')));
+// static asset middleware will take all the files and directories within /public
+// and serve them publically with their own url
+
 // app is an object that has methods you use to build a web server
 const logger = require('morgan');
 
