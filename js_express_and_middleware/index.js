@@ -18,6 +18,10 @@ const logger = require('morgan');
 
 app.set('view engine', 'ejs'); // setting configuration for express letting it know to use EJS as our templating engine
 
+// express.urlencoded is middleware for parsing x-www-urlencoded info from POST requests
+// adding the extended true option allows the data to take the shape of arrays and objects
+// puts all the info on req.body
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // will parse cookies and put them on request.cookies
 
 // app.use is a method used to mount middleware
@@ -90,6 +94,14 @@ app.get('/survey', (req, res) => {
     b: day
   });
 });
+
+app.post('/sign_in', (req, res) => {
+  // req.body holds all the info from the post request
+  const COOKIE_EXPIRE = 1000 * 60 * 60 * 24 * 7;
+  const username = req.body.username;
+  res.cookie('username', username, { maxAge: COOKIE_EXPIRE });
+  res.redirect('/welcome');
+})
 
 const ADDRESS = 'localhost'; // the loopback address this is your home for your machine. The IP is 127.0.0.1
 const PORT = 3000;
