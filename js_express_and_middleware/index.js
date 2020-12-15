@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 // STATIC ASSETS
 // Use `path.join` to combine string arguments into a path
@@ -17,6 +18,7 @@ const logger = require('morgan');
 
 app.set('view engine', 'ejs'); // setting configuration for express letting it know to use EJS as our templating engine
 
+app.use(cookieParser()); // will parse cookies and put them on request.cookies
 
 // app.use is a method used to mount middleware
 app.use(logger('dev')); // add logging middleware
@@ -48,6 +50,8 @@ app.get('/hello_world', (request, response) => {
 app.get('/welcome', (request, response) => {
   // response.send('Hello');
   // .render() use to render out a template a template at "/views/<template_name>"
+  const ONE_DAY = 1000 * 60 * 60 * 24;
+  response.cookie('hello', 'world', { maxAge: ONE_DAY })
   response.render('welcome'); // express will look for a view/template at /views/welcome
 })
 
@@ -76,6 +80,8 @@ app.get('/thank_you', (request, response) => {
 })
 
 app.get('/survey', (req, res) => {
+  console.log('🍪 Cookies:', req.cookies);
+
   const { name, colour, day } = req.query
   // const name = req.query.name;
   res.render('survey', {
