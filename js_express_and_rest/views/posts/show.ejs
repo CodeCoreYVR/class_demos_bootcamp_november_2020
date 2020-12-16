@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+  <div class='card mb-4'>
+    <% if (post.image_url) { %>
+      <img
+        class='card-img-top'
+        src='<%= post.image_url %>'
+        alt='post image'
+      >
+    <% } %>
+    <div class='card-body'>
+      <h5 class='card-title'><%= post.title %></h5>
+      <p class='card-text'>
+        <%= post.content %>
+        <em>Seen <%= post.view_count %> time(s)</em>
+        <em>Posted at <%= new Date(post.created_at).toLocaleString() %></em>
+      </p>
+    </div>
+  </div>
+<%- include('../partials/footer') %>
