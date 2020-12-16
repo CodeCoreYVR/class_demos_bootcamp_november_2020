@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+  <h1>Edit Post</h1>
+  <form action='/posts/<%= post.id %>' method='POST'>
+    <input type='hidden' name='_method' value='PATCH'>
+    <div class='form-group'>
+      <input
+        type='text'
+        class='form-control'
+        name='title'
+        placeholder='What is your post about?'
+        value='<%= post.title %>'
+      >
+    </div>
+    <div class='form-group'>
+      <input
+        type='url'
+        class='form-control'
+        name='image_url'
+        placeholder='e.g. http://imgur.com/meeeeeeeeyPic.jpg'
+        value='<%= post.image_url %>'
+      >
+    </div>
+    <div class='form-group'>
+      <textarea
+        class='form-control'
+        name='content'
+        cols='60'
+        rows='5'
+        placeholder="What are your thoughts?"
+      >
+        <%= post.content %>
+      </textarea>
+    </div>
+    <input type='submit' value='Submit' class='btn btn-outline-success'>
+  </form>
+<%- include('../partials/footer') %>

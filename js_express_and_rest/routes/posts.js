@@ -50,6 +50,30 @@ router.post('/', (req, res) => {
     });
 });
 
+// EDIT
+router.get('/:id/edit', (req, res) => {
+  knex('posts')
+    .where('id', req.params.id)
+    .first()
+    .then(post => {
+      res.render('posts/edit', { post: post });
+    });
+});
+
+// UPDATE
+router.patch('/:id', (req, res) => {
+  knex('posts')
+    .where('id', req.params.id)
+    .update({
+      title: req.body.title,
+      image_url: req.body.image_url,
+      content: req.body.content
+    })
+    .then(() => {
+      res.redirect(`/posts/${req.params.id}`);
+    });
+})
+
 // Destroy
 // DELETE /posts/:id
 router.delete('/:id', (req, res) => {
