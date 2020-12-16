@@ -1,0 +1,29 @@
+<div class='form-group'>
+  <input
+    type='text'
+    class='form-control'
+    name='title'
+    placeholder='What is your post about?'
+    value='<%= post ? post.title : '' %>'
+  >
+</div>
+<div class='form-group'>
+  <input
+    type='url'
+    class='form-control'
+    name='image_url'
+    placeholder='e.g. http://imgur.com/meeeeeeeeyPic.jpg'
+    value='<%= post ? post.image_url : '' %>'
+  >
+</div>
+<div class='form-group'>
+  <textarea
+    class='form-control'
+    name='content'
+    cols='60'
+    rows='5'
+    placeholder="What are your thoughts?"
+  >
+    <%= post ? post.content : '' %>
+  </textarea>
+</div>

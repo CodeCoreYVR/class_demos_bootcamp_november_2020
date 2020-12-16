@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 
 // New
 router.get('/new', (req, res) => {
-  res.render('posts/new');
+  res.render('posts/new', { post: false });
 });
 
 // In this url, all the words prefixed with : are called URL params.
@@ -29,7 +29,11 @@ router.get('/:id', (req, res) => {
     .first()
     // .first() is a method built into knex it will return only the first record of the array of records from a query
     .then(post => {
-      res.render('posts/show', { post:post });
+      if (!post) {
+        res.send('No Post Found');
+      } else {
+        res.render('posts/show', { post:post });
+      }
     });
 });
 
