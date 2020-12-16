@@ -145,6 +145,29 @@ app.post('/sign_out', (req, res) => {
   res.redirect('/welcome');
 });
 
+// ------------
+// POST ROUTES
+// ------------
+const knex = require('./db/client');
+
+
+app.get('/posts/new', (req, res) => {
+  res.render('posts/new');
+});
+
+app.post('/posts', (req, res) => {
+  knex('posts')
+    .insert({
+      title: req.body.title,
+      image_url: req.body.image_url,
+      content: req.body.content
+    })
+    .returning('*')
+    .then(post => {
+      res.send(post);
+    });
+});
+
 const ADDRESS = 'localhost'; // the loopback address this is your home for your machine. The IP is 127.0.0.1
 const PORT = 3000;
 app.listen(PORT, ADDRESS, () => {
