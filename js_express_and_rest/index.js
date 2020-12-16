@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
 
 // STATIC ASSETS
 // Use `path.join` to combine string arguments into a path
@@ -22,6 +23,17 @@ app.set('view engine', 'ejs'); // setting configuration for express letting it k
 // adding the extended true option allows the data to take the shape of arrays and objects
 // puts all the info on req.body
 app.use(express.urlencoded({ extended: true }));
+
+// Method Override
+// looks for a hidden input called _method
+// will change the HTTP VERB to the value of that input
+app.use(methodOverride((req, res) => {
+  if (req.body && req.body._method) {
+    const method = req.body._method;
+    return method;
+  }
+}))
+
 app.use(cookieParser()); // will parse cookies and put them on request.cookies
 
 // app.use is a method used to mount middleware

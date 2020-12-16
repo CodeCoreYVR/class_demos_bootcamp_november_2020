@@ -42,8 +42,22 @@ router.post('/', (req, res) => {
       content: req.body.content
     })
     .returning('*')
-    .then(post => {
-      res.send(post);
+    .then(posts => {
+      // knex usually returns an array of objects.
+      // so we use posts[0] to make sure we grab the object we want
+      const post = posts[0];
+      res.redirect(`/posts/${post.id}`);
+    });
+});
+
+// Destroy
+// DELETE /posts/:id
+router.delete('/:id', (req, res) => {
+  knex('posts')
+    .where('id', req.params.id)
+    .del()
+    .then(() => {
+      res.redirect('/posts');
     });
 });
 
