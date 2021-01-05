@@ -12,7 +12,7 @@ user = Hash.new
   puts "What is your age?"
   user[:age] = gets.chomp
   
-  user
+  user.to_hash
     
   end
 
