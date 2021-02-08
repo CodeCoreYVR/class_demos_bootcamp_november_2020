@@ -80,9 +80,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     Questions.create(newQuestionParams)
       .then(data => {
-        return Questions.index();
+        if (data.id) {
+          return Questions.index();
+        }
+        throw data;
       }).then(questions => {
         renderQuestions(questions)
+      }).catch(err => {
+        console.log(err);
+        newQuestionForm.querySelectorAll('p').forEach(n => n.remove())
+        for (const key in err.errors) {
+          const input = newQuestionForm.querySelector(`#${key}`);
+          const errorMessages = err.errors[key].join(',  ');
+          const errorMessageNode = document.createElement('p');
+          errorMessageNode.innerText = errorMessages;
+
+          input.parentNode.prepend(errorMessageNode);
+        }
       })
   })
 
