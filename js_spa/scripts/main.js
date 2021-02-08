@@ -24,6 +24,16 @@ const Questions = {
         console.log(res)
         return res.json();
       })
+  },
+  create(params) {
+    return fetch(`${BASE_URL}/questions`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    }).then(res => res.json())
   }
 }
 
@@ -32,20 +42,58 @@ Session.create({
   password: 'supersecret'
 }).then(console.log)
 
+function renderQuestions(questions) {
+  const questionsContainer = document.querySelector('ul.question-list');
+  questionsContainer.innerHTML = questions.map(q => {
+    return `
+      <li>
+        <a class="question-link" href="#">
+          <span>${q.id} - </span>
+          ${q.title}
+        </a>
+      </li>
+    `
+  }).join('');
+}
+
+function navigateTo(id) {
+  document.querySelectorAll('.page').forEach(node => {
+    node.classList.remove('active');
+  })
+  document.querySelector(`.page#${id}`).classList.add('active');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   Questions.index()
     .then(questions => {
-      console.log(questions);
-      const questionsContainer = document.querySelector('ul.question-list');
-      questionsContainer.innerHTML = questions.map(q => {
-        return `
-          <li>
-            <a class="question-link" href="#">
-              <span>${q.id} - </span>
-              ${q.title}
-            </a>
-          </li>
-        `
-      }).join('');
+      renderQuestions(questions)
     })
+  
+  const newQuestionForm = document.querySelector('#new-question-form');
+  newQuestionForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const newQuestionParams = {
+      title: formData.get('title'),
+      body: formData.get('body')
+    }
+    Questions.create(newQuestionParams)
+      .then(data => {
+        return Questions.index();
+      }).then(questions => {
+        renderQuestions(questions)
+      })
+  })
+
+  // navigation logic
+  const navbar = document.querySelector('.navbar');
+  navbar.addEventListener('click', (event) => {
+    event.preventDefault();
+    const target = event.target;
+    console.log(target);
+    const page = target.dataset.target;
+    console.log(page);
+    navigateTo(page)
+  })
 })
